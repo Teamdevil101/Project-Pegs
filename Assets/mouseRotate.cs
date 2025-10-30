@@ -55,7 +55,7 @@ public class mouseRotate : MonoBehaviour
         // Decide which local axis should point to the mouse:
         // - If aligning the TOP side, rotate so local +Y points to the mouse (subtract 90).
         // - If aligning the RIGHT side, rotate so local +X points to the mouse (no offset).
-        float zRotation = alignTopSide ? angle - 90f : angle;
+        float zRotation = alignTopSide ? angle - 180f : angle;
 
         Quaternion target = Quaternion.Euler(0f, 0f, zRotation);
 
@@ -100,11 +100,6 @@ public class mouseRotate : MonoBehaviour
             if (rb2d != null)
             {
                 rb2d.linearVelocity = velocity;
-            }
-            else
-            {
-                // If no Rigidbody2D, move it one frame-step to avoid overlap; continuous motion should use Rigidbody2D.
-                proj.transform.position = proj.transform.position + (Vector3)(velocity * Time.fixedDeltaTime);
             }
         }
     }

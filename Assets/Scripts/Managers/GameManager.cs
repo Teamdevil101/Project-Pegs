@@ -7,9 +7,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public Transform pegContainer;
+    public short startingBallCount;
+    public int startingOrangePegCount;
 
     public TMP_Text pegCounterElement; // FOR TESTING!
 
+    private short totalBallCount;
     private List<GameObject> allPegs = new();
     private GameState currentGameState = GameState.Start;
 
@@ -28,19 +31,22 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        totalBallCount = startingBallCount;
+
         foreach (Transform peg in pegContainer)
         {
             allPegs.Add(peg.gameObject);
         }
 
-        SetRandomOrangePegs(25);
+        SetRandomOrangePegs(startingOrangePegCount);
     }
 
     // Update is called once per frame
     void Update()
     {
         pegCounterElement.text = $"Peg Counter:\nTotal: {GetAllPegsCount(false)}\nOrange Total: {GetAllOrangePegsCount(false)}" +
-            $"\nTotal Left: {GetAllPegsCount()}\nOrange Left: {GetAllOrangePegsCount()}"; // Should be moved out of here.
+            $"\nTotal Left: {GetAllPegsCount()}\nOrange Left: {GetAllOrangePegsCount()}" +
+            $"\nBall Count: {totalBallCount}";// Should be moved out of here.
     }
 
     private void SetRandomOrangePegs(int totalCount)
@@ -98,6 +104,22 @@ public class GameManager : MonoBehaviour
             return allPegs.Where(g => g.CompareTag("OrangePeg") && g.activeSelf).Count();
         else
             return allPegs.Where(g => g.CompareTag("OrangePeg")).Count();
+    }
+
+    public void DestroySafely(GameObject obj, float delay)
+    {
+        //allPegs.Remove(obj);
+        obj.SetActive(false);
+    }
+    
+    public int GetTotalBallCount() => totalBallCount;
+
+    public void AdjustBallCount(short amount)
+    {
+        totalBallCount += amount;
+        
+        if(totalBallCount < 0)
+            totalBallCount = 0;
     }
 
     public enum GameState

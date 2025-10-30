@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class pegAction : MonoBehaviour
+public class PegAction : MonoBehaviour
 {
     [Tooltip("Optional: if set, only objects with this tag will trigger the peg. Leave empty to accept any physics object.")]
     public string requiredTag = "";
@@ -41,7 +41,7 @@ public class pegAction : MonoBehaviour
         if (myCollider != null)
             //myCollider.enabled = false;
 
-        Destroy(gameObject, destroyDelay);
+            GameManager.instance.DestroySafely(gameObject, destroyDelay); // TODO: Move to GameManager for destruction.
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -49,8 +49,9 @@ public class pegAction : MonoBehaviour
         HandleHit(collision.gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    // Useful for trigger objects
+    /*void OnTriggerEnter2D(Collider2D other)
     {
         HandleHit(other.gameObject);
-    }
+    }*/
 }
