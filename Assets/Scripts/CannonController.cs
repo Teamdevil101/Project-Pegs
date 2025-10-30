@@ -41,8 +41,10 @@ public class CannonController : MonoBehaviour
 
     void Shoot()
     {
-        if (ballPrefab != null && spawnPoint != null)
+        if (ballPrefab != null && spawnPoint != null && GameManager.instance.GetTotalBallCount() > 0)
         {
+            GameManager.instance.AdjustBallCount(-1);
+
             // Instantiate ball at spawn point
             GameObject newBall = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
 
