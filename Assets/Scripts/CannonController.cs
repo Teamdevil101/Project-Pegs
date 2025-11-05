@@ -14,7 +14,7 @@ public class CannonController : MonoBehaviour
     {
         RotateCannon();
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && GameManager.instance.GetCurrentState() == GameManager.GameState.Aim)
         {
             Shoot();
         }
@@ -44,6 +44,8 @@ public class CannonController : MonoBehaviour
         if (ballPrefab != null && spawnPoint != null && GameManager.instance.GetTotalBallCount() > 0)
         {
             GameManager.instance.AdjustBallCount(-1);
+            GameManager.instance.AdjustActiveBallToCount(1);
+            GameManager.instance.ChangeState(GameManager.GameState.Shot);
 
             // Instantiate ball at spawn point
             GameObject newBall = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
