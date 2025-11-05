@@ -1,12 +1,16 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Needed to load scenes
+using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [Header("Scene Names or Indexes")]
-    public string playSceneName = "GameScene"; // Replace with your game scene name
+    [Header("Scene Settings")]
+    public string playSceneName = "GameScene";
 
-    // Functions to assign to buttons
+    [Header("Panels")]
+    public GameObject optionsPanel;
+    public GameObject leaderboardPanel;
+    public GameObject helpPanel;
+
     public void OnPlayButton()
     {
         SceneManager.LoadScene(playSceneName);
@@ -14,26 +18,37 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnOptionsButton()
     {
-        Debug.Log("Options button clicked!");
-        // Here you can open your Options menu panel
+        ShowPanel(optionsPanel);
     }
 
     public void OnLeaderboardButton()
     {
-        Debug.Log("Leaderboard button clicked!");
-        // Here you can open your Leaderboard panel
+        ShowPanel(leaderboardPanel);
     }
 
     public void OnHelpButton()
     {
-        Debug.Log("Help button clicked!");
-        // Here you can open your Help panel
+        ShowPanel(helpPanel);
+    }
+
+    public void OnClosePanel(GameObject panel)
+    {
+        panel.SetActive(false);
+    }
+
+    private void ShowPanel(GameObject panel)
+    {
+        // Hide all panels first
+        optionsPanel.SetActive(false);
+        leaderboardPanel.SetActive(false);
+        helpPanel.SetActive(false);
+
+        // Show the requested panel
+        panel.SetActive(true);
     }
 
     public void OnQuitButton()
     {
-        Debug.Log("Quit button clicked!");
         Application.Quit();
     }
 }
-
