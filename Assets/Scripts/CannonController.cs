@@ -6,6 +6,8 @@ public class CannonController : MonoBehaviour
     public GameObject ballPrefab;      // Drag your Ball prefab here
     public Transform spawnPoint;       // Drag the BallSpawnPoint here
     public float shootForce = 10f;     // How fast the ball shoots
+    public LineRenderer trajectoryLine;
+    public int resolution = 40;
 
     [Header("Aim Adjustment")]
     public Vector2 aimOffset = Vector2.zero; // Optional offset to fine-tune mouse alignment
@@ -13,6 +15,7 @@ public class CannonController : MonoBehaviour
     void Update()
     {
         RotateCannon();
+        DrawTrajectory();
 
         if (Input.GetMouseButtonDown(0) && GameManager.instance.GetCurrentState() == GameManager.GameState.Aim)
         {
@@ -58,4 +61,29 @@ public class CannonController : MonoBehaviour
             }
         }
     }
+
+    void DrawTrajectory()
+    {
+        if (trajectoryLine == null) return;
+
+        Vector2 startPos = spawnPoint.position;
+        Vector2 startVel = (-spawnPoint.up) * shootForce;
+
+        Vector2 gravity = Physics2D.gravity * ballPrefab.GetComponent<Rigidbody2D>().gravityScale;
+
+        trajectoryLine.positionCount = resolution;
+
+        for (int i = 0; i < resolution; i++)
+        {
+            float t = i * 0.05f; // The spacing between points
+
+            Vector2 pos =
+                startPos +
+                startVel * t +
+                0.5f * gravity * t * t;
+
+            trajectoryLine.SetPosition(i, pos);
+        }
+    }
+
 }
