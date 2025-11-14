@@ -2,24 +2,35 @@ using UnityEngine;
 
 public class PegAction : MonoBehaviour
 {
-    [Tooltip("Optional: if set, only objects with this tag will trigger the peg. Leave empty to accept any physics object.")]
-    public string requiredTag = "";
+    [Tooltip("Only objects with this tag will trigger the peg.")]
+    public string ballTag = "";
 
-    [Tooltip("Color to apply when the peg is hit.")]
-    public Color hitColor = Color.yellow;
+    public Sprite baseSprite;
+    public Sprite hitSprite;
 
-    [Tooltip("Seconds to wait before destroying the peg after being hit.")]
-    public float destroyDelay = 3f;
+    public SpriteRenderer pegSpriteRenderer;
+    private Collider2D myCollider;
 
-    SpriteRenderer spriteRenderer;
-    Collider2D myCollider;
-    bool triggered = false;
+    public PegType MyPegType { get; private set; }
+    private bool triggered = false;
 
-    void Awake()
+    private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         myCollider = GetComponent<Collider2D>();
+        pegSpriteRenderer.sprite = baseSprite;
     }
+
+    private void Start()
+    {
+        UpdatePegColor();
+    }
+
+    public void UpdatePegColor()
+    {
+        pegSpriteRenderer.color = GameManager.instance.pegData[(int)MyPegType].baseColor;
+    }
+
+    public void SetPegType(PegType type) => MyPegType = type;
 
     // Shared handler for both trigger and collision events
     void HandleHit(GameObject other)
@@ -27,21 +38,18 @@ public class PegAction : MonoBehaviour
         if (triggered) return;
 
         // Optional tag filter
-        if (!string.IsNullOrEmpty(requiredTag) && !other.CompareTag(requiredTag)) return;
+        if (!string.IsNullOrEmpty(ballTag) && !other.CompareTag(ballTag)) return;
 
         // Ensure the other object is a physics object (has a Rigidbody2D)
         if (other.GetComponent<Rigidbody2D>() == null) return;
 
         triggered = true;
 
-        if (spriteRenderer != null)
-            spriteRenderer.color = hitColor;
+        if (pegSpriteRenderer != null)
+            pegSpriteRenderer.sprite = hitSprite;
 
-        // Disable collider so it won't be hit again while waiting to destroy
         if (myCollider != null)
-            //myCollider.enabled = false;
-
-            GameManager.instance.DestroySafely(gameObject, destroyDelay); // TODO: Move to GameManager for destruction.
+            GameManager.instance.StoreForDestruction(gameObject);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -54,4 +62,12 @@ public class PegAction : MonoBehaviour
     {
         HandleHit(other.gameObject);
     }*/
+
+    public enum PegType
+    {
+        Regular,
+        Mandatory,
+        PowerUp,
+        Special
+    }
 }
