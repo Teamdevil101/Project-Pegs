@@ -15,12 +15,12 @@ public class GameManager : MonoBehaviour
 
     public float pegDisableDelay = 0.1f;
 
+    [Space]
+    public PegData[] pegData;
+
     private float pegTimer = 0f;
     private int pegIndex = 0;
     private PegAction currentSpecialPeg = null;
-
-    [Space]
-    public PegData[] pegData;
 
     private short totalBallCount;
     private short totalActiveBallCount;
@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
                 {
                     currentGameState = GameState.Aim;
                     SetRandomPurplePeg();
+                    SoundManager.instance.PlaySound(SoundManager.instance.reloadedSound);
                 }
 
                 if (pegIndex >= pegsToDisable.Count) return;
@@ -119,6 +120,9 @@ public class GameManager : MonoBehaviour
 
     private void SetRandomPurplePeg()
     {
+        if (GetAllPegsCount() == 0)
+            return;
+            
         if (currentSpecialPeg != null)
         {
             currentSpecialPeg.SetPegType(PegAction.PegType.Regular);
@@ -209,5 +213,6 @@ public class GameManager : MonoBehaviour
         public PegAction.PegType linkedType;
         public long basePoints;
         public Color baseColor = Color.white;
+        public AudioClip impactSound;
     }
 }
