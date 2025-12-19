@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1cd69c743d39f5541be53b71b6f8e784
+guid: 3ed4bf2b8a8a0884fb1e8959d6833871
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8558094809550153481
-    second: SimpleFadedCircle_0
+      213: 6002072530479503962
+    second: save_64dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,12 +48,12 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -74,8 +74,8 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
+    textureFormat: 4
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SimpleFadedCircle_0
+      name: save_64dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 8
-        width: 238
-        height: 239
+        x: 7
+        y: 7
+        width: 50
+        height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7f816aa0d1a8b3980800000000000000
-      internalID: -8558094809550153481
+      spriteID: a5a5c578a25ab4350800000000000000
+      internalID: 6002072530479503962
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SimpleFadedCircle_0: -8558094809550153481
+      save_64dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_0: 6002072530479503962
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

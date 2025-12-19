@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef959fb62244ee47902cac8deeac482, type: 3}
+  m_Name: Level Object Registry
+  m_EditorClassIdentifier: 
+  objects:
+  - id: peg
+    levelObjects:
+      previewPrefab: {fileID: 3966357686019056975, guid: adb70c361ef81914a97bb26450991de7, type: 3}
+      inGamePrefab: {fileID: 4253736103206991564, guid: 11ed28574da30c044bde036009be4df3, type: 3}
+      editorPrefab: {fileID: 4253736103206991564, guid: 5427009ef6c190445bb011745deb0827, type: 3}
+  - id: roundpad
+    levelObjects:
+      previewPrefab: {fileID: 3966357686019056975, guid: f20dadf7a0e30ce47a24fcc111826940, type: 3}
+      inGamePrefab: {fileID: 3966357686019056975, guid: 5f5a54179df8e8849ae3f1c34ee45e42, type: 3}
+      editorPrefab: {fileID: 3966357686019056975, guid: e110536d002c20c47a0747759a77d95f, type: 3}
+  physicsMaterials:
+  - id: bouncy
+    material: {fileID: 6200000, guid: 3591a53746d54fd4688c577304e6bec7, type: 2}
