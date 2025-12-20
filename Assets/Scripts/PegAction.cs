@@ -4,19 +4,23 @@ public class PegAction : MonoBehaviour
 {
     [Tooltip("Only objects with this tag will trigger the peg.")]
     public string ballTag = "";
+    public AudioClip pegPopSound = null;
 
+    [Space]
     public Sprite baseSprite;
     public Sprite hitSprite;
 
     public SpriteRenderer pegSpriteRenderer;
-    private Collider2D myCollider;
+    public Collider2D myCollider;
 
     public PegType MyPegType { get; private set; }
     private bool triggered = false;
 
     private void Awake()
     {
-        myCollider = GetComponent<Collider2D>();
+        if(myCollider == null)
+            myCollider = GetComponent<Collider2D>();
+        
         pegSpriteRenderer.sprite = baseSprite;
     }
 
@@ -33,7 +37,7 @@ public class PegAction : MonoBehaviour
     public void SetPegType(PegType type) => MyPegType = type;
 
     // Shared handler for both trigger and collision events
-    void HandleHit(GameObject other)
+    public void HandleHit(GameObject other)
     {
         if (triggered) return;
 
@@ -61,20 +65,9 @@ public class PegAction : MonoBehaviour
         
         if (impactClip != null)
         {
-            SoundManager.instance.PlayPegImpactSound(impactClip, velocity);
+            SoundManager.instance.PlayPegImpactSound(impactClip, MyPegType);
         }
     }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        HandleHit(collision.gameObject);
-    }
-
-    // Useful for trigger objects
-    /*void OnTriggerEnter2D(Collider2D other)
-    {
-        HandleHit(other.gameObject);
-    }*/
 
     public enum PegType
     {

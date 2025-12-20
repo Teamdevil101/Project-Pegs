@@ -16,6 +16,16 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene(playSceneName);
     }
 
+    public void OnButtonClickChangeScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void OnButtonClickChangeScene(int sceneId)
+    {
+        SceneManager.LoadScene(sceneId);
+    }
+
     public void OnOptionsButton()
     {
         ShowPanel(optionsPanel);

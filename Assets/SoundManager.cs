@@ -58,6 +58,8 @@ public class SoundManager : MonoBehaviour
         if (audioSource == null || clip == null)
             return;
 
+        audioSource.pitch = 1;
+
         if (delay > 0f)
         {
             Invoke(nameof(PlaySoundImmediate), delay);
@@ -80,17 +82,19 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Play a sound with velocity-based volume (for peg collisions)
+    /// Play a sound on hitting a peg
     /// </summary>
-    public void PlayPegImpactSound(AudioClip clip, float velocity)
+    public void PlayPegImpactSound(AudioClip clip, PegAction.PegType myType)
     {
         if (audioSource == null || clip == null)
             return;
 
-        float volume = Mathf.Clamp01(Mathf.InverseLerp(pegMinVelocity, pegMaxVelocity, velocity));
-        volume = Mathf.Lerp(pegMinVolume, pegMaxVolume, volume);
-        
-        audioSource.volume = masterVolume * sfxVolume * volume;
+        if(myType == PegAction.PegType.PowerUp || myType == PegAction.PegType.Special)
+            audioSource.pitch = 1;
+        else
+            audioSource.pitch = 1 + (0.05f * GameManager.instance.GetTotalHitPegCount);
+
+        audioSource.volume = masterVolume * sfxVolume;
         audioSource.PlayOneShot(clip);
     }
 
@@ -101,6 +105,8 @@ public class SoundManager : MonoBehaviour
     {
         if (audioSource == null || clip == null)
             return;
+
+        audioSource.pitch = 1;
 
         float volume = Mathf.Clamp01(Mathf.InverseLerp(minVelocity, maxVelocity, velocity));
         volume = Mathf.Lerp(minVolume, maxVolume, volume);

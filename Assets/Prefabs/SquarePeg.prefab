@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4764811438986076564}
   - component: {fileID: 3421413407539371484}
-  - component: {fileID: 2364571536368654279}
   - component: {fileID: 3649177765529831970}
+  - component: {fileID: 8802771574620536587}
   m_Layer: 0
   m_Name: Peg
   m_TagString: Untagged
@@ -90,22 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2364571536368654279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2658881317641064233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4522a7c1a8e35ed4aac9c89a49eaa3c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ballTag: 
-  baseSprite: {fileID: 21300000, guid: fc23d03450d4ffa4789fae6d0abb0084, type: 3}
-  hitSprite: {fileID: 21300000, guid: 81eee4510bd3a1a479a43bcae267e4bf, type: 3}
-  pegSpriteRenderer: {fileID: 6676862085864233368}
 --- !u!61 &3649177765529831970
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -152,6 +136,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &8802771574620536587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2658881317641064233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad8d15e3050c8d4b9af202420db3668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPeg: {fileID: 4002919886072450002}
 --- !u!1 &4253736103206991564
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8027161192999104126}
+  - component: {fileID: 4002919886072450002}
   m_Layer: 0
   m_Name: SquarePeg
   m_TagString: Untagged
@@ -184,6 +182,24 @@ Transform:
   - {fileID: 4764811438986076564}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4002919886072450002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4253736103206991564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4522a7c1a8e35ed4aac9c89a49eaa3c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballTag: Ball
+  pegPopSound: {fileID: 8300000, guid: 6152ed851078f5a49a36e59ba6f58256, type: 3}
+  baseSprite: {fileID: 21300000, guid: 9c80441014f5f4447b8e57dc94183a36, type: 3}
+  hitSprite: {fileID: 21300000, guid: 5c546e9e91cd8114889d141b2b788fbc, type: 3}
+  pegSpriteRenderer: {fileID: 6676862085864233368}
+  myCollider: {fileID: 3649177765529831970}
 --- !u!1 &5906412751278362636
 GameObject:
   m_ObjectHideFlags: 0

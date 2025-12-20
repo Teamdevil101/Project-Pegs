@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelEditorUI : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class LevelEditorUI : MonoBehaviour
 
     private string currentFilePath;
     private bool isLoading;
+    private bool readyToPlayTest = false;
 
     void Awake()
     {
@@ -34,6 +36,14 @@ public class LevelEditorUI : MonoBehaviour
         
         if (editor != null)
             editor.OnLevelChanged += HandleLevelChanged;
+
+        if (GameManager.customLevelData != null)
+        {
+            editor.SetLevelState(GameManager.customLevelData);
+            currentFilePath = GameManager.customLevelPath;
+            GameManager.customLevelData = null;
+            GameManager.customLevelPath = null;
+        }
     }
 
     void OnDestroy()
@@ -124,8 +134,11 @@ public class LevelEditorUI : MonoBehaviour
 
                 SaveToCurrentPath();
                 UpdateLevelLabel();
+
+                if (readyToPlayTest)
+                    OnPlayTestButton();
             },
-            onCancel: null
+            onCancel: () => { readyToPlayTest = false; }
         );
     }
 
@@ -184,5 +197,42 @@ public class LevelEditorUI : MonoBehaviour
         editor.ClearDirtyFlag();
         saveButton.interactable = false;
         Debug.Log("Saved level to: " + currentFilePath);
+    }
+
+    public void OnQuitButton()
+    {
+        Application.Quit();
+    }
+
+    public void OnReturnToMenuButton()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void OnPlayTestButton()
+    {
+        if (editor == null)
+        {
+            Debug.LogError("PlayCustomLevelButton: editor reference not set.");
+            return;
+        }
+
+        readyToPlayTest = true;
+
+        var data = editor.BuildLevelData();
+        
+        
+        if (editor.IsDirty)
+        {
+            OnSaveButton();
+            
+            if(string.IsNullOrEmpty(currentFilePath))
+                return;
+        }
+
+        GameManager.customLevelData = data;
+        GameManager.customLevelPath = currentFilePath;
+
+        SceneManager.LoadScene("GameplayScene");
     }
 }

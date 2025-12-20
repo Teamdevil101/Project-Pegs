@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 370661394028871882}
   - component: {fileID: 2342603957336571702}
   - component: {fileID: 1561556245268291022}
-  - component: {fileID: 323000972988111322}
+  - component: {fileID: 4799257720993495954}
   m_Layer: 0
   m_Name: Peg
   m_TagString: Untagged
@@ -126,7 +126,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &323000972988111322
+--- !u!114 &4799257720993495954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,13 +135,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2214007764086838987}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4522a7c1a8e35ed4aac9c89a49eaa3c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad8d15e3050c8d4b9af202420db3668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballTag: 
-  baseSprite: {fileID: 21300000, guid: fc23d03450d4ffa4789fae6d0abb0084, type: 3}
-  hitSprite: {fileID: 21300000, guid: 81eee4510bd3a1a479a43bcae267e4bf, type: 3}
-  pegSpriteRenderer: {fileID: 4639186922122989125}
+  myPeg: {fileID: 5759245156938713674}
 --- !u!1 &4248774689070540972
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,6 +235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8027161192999104126}
+  - component: {fileID: 5759245156938713674}
   m_Layer: 0
   m_Name: RoundPeg
   m_TagString: Untagged
@@ -261,3 +259,21 @@ Transform:
   - {fileID: 370661394028871882}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5759245156938713674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4253736103206991564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4522a7c1a8e35ed4aac9c89a49eaa3c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballTag: Ball
+  pegPopSound: {fileID: 8300000, guid: 6152ed851078f5a49a36e59ba6f58256, type: 3}
+  baseSprite: {fileID: 21300000, guid: fc23d03450d4ffa4789fae6d0abb0084, type: 3}
+  hitSprite: {fileID: 21300000, guid: 81eee4510bd3a1a479a43bcae267e4bf, type: 3}
+  pegSpriteRenderer: {fileID: 4639186922122989125}
+  myCollider: {fileID: 1561556245268291022}
