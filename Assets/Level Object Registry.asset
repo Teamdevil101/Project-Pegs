@@ -23,6 +23,16 @@ MonoBehaviour:
       previewPrefab: {fileID: 3966357686019056975, guid: f20dadf7a0e30ce47a24fcc111826940, type: 3}
       inGamePrefab: {fileID: 3966357686019056975, guid: 5f5a54179df8e8849ae3f1c34ee45e42, type: 3}
       editorPrefab: {fileID: 3966357686019056975, guid: e110536d002c20c47a0747759a77d95f, type: 3}
+  - id: squarepad
+    levelObjects:
+      previewPrefab: {fileID: 3966357686019056975, guid: 1236cde48deffb64d80b00447abb8dd1, type: 3}
+      inGamePrefab: {fileID: 3966357686019056975, guid: 5e412298a971a1449bb9ba9f266b21f1, type: 3}
+      editorPrefab: {fileID: 3966357686019056975, guid: 1a40d96fb2fc7e34989592c1d0d87409, type: 3}
+  - id: squarepeg
+    levelObjects:
+      previewPrefab: {fileID: 3966357686019056975, guid: 1236cde48deffb64d80b00447abb8dd1, type: 3}
+      inGamePrefab: {fileID: 4253736103206991564, guid: cabb22130a3cf3b4f8a183404141ebb5, type: 3}
+      editorPrefab: {fileID: 4253736103206991564, guid: ce860e5b78ec0a8498a5486dfd405f42, type: 3}
   physicsMaterials:
   - id: bouncy
     material: {fileID: 6200000, guid: 3591a53746d54fd4688c577304e6bec7, type: 2}

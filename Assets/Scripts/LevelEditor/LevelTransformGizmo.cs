@@ -252,6 +252,9 @@ public class LevelTransformGizmo : MonoBehaviour
 
     public bool IsPointerOverGizmo(Vector2 screenPos)
     {
+        if (IsPointerOverUI())
+            return true;
+
         if (sceneCamera == null && editor != null)
             sceneCamera = editor.sceneCamera;
 
