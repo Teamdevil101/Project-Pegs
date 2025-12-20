@@ -41,15 +41,28 @@ public class PegAction : MonoBehaviour
         if (!string.IsNullOrEmpty(ballTag) && !other.CompareTag(ballTag)) return;
 
         // Ensure the other object is a physics object (has a Rigidbody2D)
-        if (other.GetComponent<Rigidbody2D>() == null) return;
+        Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
+        if (rb == null) return;
 
         triggered = true;
 
         if (pegSpriteRenderer != null)
             pegSpriteRenderer.sprite = hitSprite;
 
+        PlayImpactSound(rb.linearVelocity.magnitude);
+
         if (myCollider != null)
             GameManager.instance.StoreForDestruction(gameObject);
+    }
+
+    void PlayImpactSound(float velocity)
+    {
+        AudioClip impactClip = GameManager.instance.pegData[(int)MyPegType].impactSound;
+        
+        if (impactClip != null)
+        {
+            SoundManager.instance.PlayPegImpactSound(impactClip, velocity);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)

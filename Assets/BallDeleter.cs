@@ -8,6 +8,7 @@ public class BallDeleter : MonoBehaviour
         {
             Destroy(other.gameObject);
             GameManager.instance.AdjustActiveBallToCount(-1);
+            SoundManager.instance.PlaySound(SoundManager.instance.outSound);
         }
     }
 }
