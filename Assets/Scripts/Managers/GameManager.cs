@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -28,6 +29,8 @@ public class GameManager : MonoBehaviour
     private List<PegAction> allPegs = new();
     private List<PegAction> pegsToDisable = new();
     private GameState currentGameState = GameState.Start;
+    public GameObject winUI;
+    public GameObject loseUI;
 
     public bool isACustomLevel = false;
     public static LevelData customLevelData;
@@ -76,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isACustomLevel)
                 SceneManager.LoadScene("LevelEditor");
@@ -116,7 +119,11 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        
+        if (totalBallCount <= 0 && totalActiveBallCount == 0 && GetAllOrangePegsCount() > 0 && (currentGameState != GameState.Win || currentGameState != GameState.Lose))
+            LoseGame();
 
+        
         pegCounterElement.text = $"Peg Counter:\nTotal: {GetAllPegsCount(false)}\nOrange Total: {GetAllOrangePegsCount(false)}" +
             $"\nTotal Left: {GetAllPegsCount()}\nOrange Left: {GetAllOrangePegsCount()}" +
             $"\nBall Count: {totalBallCount}";// Should be moved out of here.
@@ -182,15 +189,15 @@ public class GameManager : MonoBehaviour
 
     public List<PegAction> GetAllOrangePegs(bool excludeVanished = true)
     {
-        if(excludeVanished)
-            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf).ToList(); // Placeholder way to find orange pegs
+        if (excludeVanished)
+            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf).ToList();
         else
-            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory).ToList(); // Placeholder way to find orange pegs
+            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory).ToList();
     }
 
     public List<PegAction> GetAllPegs(bool excludeVanished = true)
     {
-        if(excludeVanished)
+        if (excludeVanished)
             return allPegs.Where(g => g.gameObject.activeSelf).ToList();
         else
             return allPegs;
@@ -198,7 +205,7 @@ public class GameManager : MonoBehaviour
 
     public int GetAllPegsCount(bool excludeVanished = true)
     {
-        if(excludeVanished)
+        if (excludeVanished)
             return allPegs.Where(g => g.gameObject.activeSelf).Count();
         else
             return allPegs.Count;
@@ -207,7 +214,7 @@ public class GameManager : MonoBehaviour
     public int GetAllOrangePegsCount(bool excludeVanished = true)
     {
         if (excludeVanished)
-            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf).Count();
+            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf && !g.IsTriggered()).Count();
         else
             return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory).Count();
     }
@@ -282,7 +289,8 @@ public class GameManager : MonoBehaviour
         Start,
         Aim,
         Shot,
-        Final
+        Win,
+        Lose
     }
 
     [System.Serializable]
@@ -292,5 +300,47 @@ public class GameManager : MonoBehaviour
         public long basePoints;
         public Color baseColor = Color.white;
         public AudioClip impactSound;
+    }
+
+    public void WinGame()
+    {
+        if (winUI != null)
+            winUI.SetActive(true);
+
+        currentGameState = GameState.Win;
+        Time.timeScale = 0.4f; // Optional slow motion
+
+        StartCoroutine(ReturnToMenu());
+    }
+
+    public void LoseGame()
+    {
+        if (loseUI != null)
+            loseUI.SetActive(true);
+
+        currentGameState = GameState.Lose;
+        Time.timeScale = 0.4f; // Optional slow motion
+
+        StartCoroutine(RestartGame());
+    }
+
+    public IEnumerator RestartGame()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public IEnumerator ReturnToMenu()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+
+        Time.timeScale = 1f;
+        
+        if (isACustomLevel)
+            SceneManager.LoadScene("LevelEditor");
+        else
+            SceneManager.LoadScene(0);
     }
 }

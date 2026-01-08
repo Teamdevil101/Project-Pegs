@@ -1,0 +1,285 @@
+{
+    "levelName": "Untitled",
+    "objects": [
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": -0.75,
+                "y": 1.25
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "roundpad",
+            "position": {
+                "x": 5.5,
+                "y": -4.0
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepad",
+            "position": {
+                "x": -5.5,
+                "y": -4.0
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": 1.5,
+                "y": -0.75
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": -1.7685184478759766,
+                "y": -2.0216050148010256
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": -1.382716417312622,
+                "y": 0.12345671653747559
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": 0.9320992231369019,
+                "y": 0.6018519401550293
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": -3.09567928314209,
+                "y": -1.1419751644134522
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": -0.30246931314468386,
+                "y": -1.2808642387390137
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": 3.0462968349456789,
+                "y": -2.253086566925049
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": 3.3086419105529787,
+                "y": -0.09259253740310669
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": 2.6913583278656008,
+                "y": -1.3734567165374756
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": 2.274691581726074,
+                "y": -2.2067902088165285
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "peg",
+            "position": {
+                "x": -3.265432119369507,
+                "y": -0.26234567165374758
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": -4.222222328186035,
+                "y": 0.5401235818862915
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": -4.978394985198975,
+                "y": -2.129629611968994
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": -3.003086566925049,
+                "y": -3.3641977310180666
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": -1.1820987462997437,
+                "y": -3.6419754028320314
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": 0.29938292503356936,
+                "y": -3.7808642387390138
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        },
+        {
+            "objectTypeId": "squarepeg",
+            "position": {
+                "x": 3.4012341499328615,
+                "y": 0.6635802984237671
+            },
+            "rotationZ": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "physicsMaterialId": ""
+        }
+    ]
+}

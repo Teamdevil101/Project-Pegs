@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PegAction : MonoBehaviour
 {
-    [Tooltip("Only objects with this tag will trigger the peg.")]
     public string ballTag = "";
     public AudioClip pegPopSound = null;
 
@@ -18,6 +17,9 @@ public class PegAction : MonoBehaviour
 
     private void Awake()
     {
+        if (pegSpriteRenderer != null)
+            pegSpriteRenderer.sprite = baseSprite;
+
         if(myCollider == null)
             myCollider = GetComponent<Collider2D>();
         
@@ -31,7 +33,8 @@ public class PegAction : MonoBehaviour
 
     public void UpdatePegColor()
     {
-        pegSpriteRenderer.color = GameManager.instance.pegData[(int)MyPegType].baseColor;
+        if (GameManager.instance != null && pegSpriteRenderer != null)
+            pegSpriteRenderer.color = GameManager.instance.pegData[(int)MyPegType].baseColor;
     }
 
     public void SetPegType(PegType type) => MyPegType = type;
@@ -40,26 +43,26 @@ public class PegAction : MonoBehaviour
     public void HandleHit(GameObject other)
     {
         if (triggered) return;
-
-        // Optional tag filter
         if (!string.IsNullOrEmpty(ballTag) && !other.CompareTag(ballTag)) return;
 
         // Ensure the other object is a physics object (has a Rigidbody2D)
-        Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
-        if (rb == null) return;
+        if (!other.TryGetComponent(out Rigidbody2D rb)) return;
 
         triggered = true;
 
         if (pegSpriteRenderer != null)
             pegSpriteRenderer.sprite = hitSprite;
 
-        PlayImpactSound(rb.linearVelocity.magnitude);
+        PlayImpactSound();
 
         if (myCollider != null)
             GameManager.instance.StoreForDestruction(gameObject);
+
+        if (GameManager.instance.GetAllOrangePegsCount() <= 0 && (GameManager.instance.GetCurrentState() != GameManager.GameState.Win || GameManager.instance.GetCurrentState() != GameManager.GameState.Lose))
+            GameManager.instance.WinGame();
     }
 
-    void PlayImpactSound(float velocity)
+    void PlayImpactSound()
     {
         AudioClip impactClip = GameManager.instance.pegData[(int)MyPegType].impactSound;
         
@@ -69,6 +72,12 @@ public class PegAction : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        HandleHit(collision.gameObject);
+    }
+
+    public bool IsTriggered() => triggered;
     public enum PegType
     {
         Regular,
