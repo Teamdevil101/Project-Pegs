@@ -15,12 +15,12 @@ public class GameManager : MonoBehaviour
 
     public float pegDisableDelay = 0.1f;
 
+    [Space]
+    public PegData[] pegData;
+
     private float pegTimer = 0f;
     private int pegIndex = 0;
     private PegAction currentSpecialPeg = null;
-
-    [Space]
-    public PegData[] pegData;
 
     private short totalBallCount;
     private short totalActiveBallCount;
@@ -66,29 +66,33 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-     
-        if (totalActiveBallCount == 0 && pegsToDisable.Count > 0)
+        if(currentGameState == GameState.Shot)
         {
-            pegTimer += Time.deltaTime;
-            if (pegTimer >= pegDisableDelay)
+            if(totalActiveBallCount == 0)
             {
-                pegsToDisable[pegIndex].gameObject.SetActive(false);
-                pegIndex++;
-                pegTimer = 0f;
-            }
+                if (pegsToDisable.Count == 0)
+                {
+                    currentGameState = GameState.Aim;
+                    SetRandomPurplePeg();
+                    SoundManager.instance.PlaySound(SoundManager.instance.reloadedSound);
+                }
 
-            if (pegIndex >= pegsToDisable.Count)
-            {
-                pegIndex = 0;
-                pegsToDisable.Clear();
-            }
-        }
+                if (pegIndex >= pegsToDisable.Count) return;
 
-        
-        if (totalActiveBallCount == 0 && currentGameState != GameState.Final)
-        {
-            currentGameState = GameState.Aim;
-            SetRandomPurplePeg();
+                pegTimer += Time.deltaTime;
+                if (pegTimer >= pegDisableDelay)
+                {
+                    pegsToDisable[pegIndex].gameObject.SetActive(false);
+                    pegIndex++;
+                    pegTimer = 0f;
+                }
+
+                if (pegIndex >= pegsToDisable.Count)
+                {
+                    pegIndex = 0;
+                    pegsToDisable.Clear();
+                }
+            }
         }
 
         
@@ -102,7 +106,7 @@ public class GameManager : MonoBehaviour
         
         pegCounterElement.text = $"Peg Counter:\nTotal: {GetAllPegsCount(false)}\nOrange Total: {GetAllOrangePegsCount(false)}" +
             $"\nTotal Left: {GetAllPegsCount()}\nOrange Left: {GetAllOrangePegsCount()}" +
-            $"\nBall Count: {totalBallCount}";
+            $"\nBall Count: {totalBallCount}";// Should be moved out of here.
     }
 
     private void SetRandomOrangePegs(int totalCount)
@@ -126,6 +130,9 @@ public class GameManager : MonoBehaviour
 
     private void SetRandomPurplePeg()
     {
+        if (GetAllPegsCount() == 0)
+            return;
+            
         if (currentSpecialPeg != null)
         {
             currentSpecialPeg.SetPegType(PegAction.PegType.Regular);
@@ -216,6 +223,7 @@ public class GameManager : MonoBehaviour
         public PegAction.PegType linkedType;
         public long basePoints;
         public Color baseColor = Color.white;
+        public AudioClip impactSound;
     }
 
     public void WinGame()
