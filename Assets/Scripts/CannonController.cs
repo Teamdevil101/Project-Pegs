@@ -136,17 +136,21 @@ public class CannonController : MonoBehaviour
 
     void Shoot()
     {
+        if (GameManager.instance.GetCurrentState() == GameManager.GameState.Shot)
+            return;
+
         if (ballPrefab != null && spawnPoint != null && GameManager.instance.GetTotalBallCount() > 0)
         {
             GameManager.instance.AdjustActiveBallToCount(1);
+            GameManager.instance.AdjustBallCount(-1);
+
+            GameManager.instance.ChangeState(GameManager.GameState.Shot);
 
             GameObject newBall = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
 
-            Rigidbody2D rb = newBall.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
+            if (newBall.TryGetComponent(out Rigidbody2D rb))
                 rb.AddForce(-spawnPoint.up * shootForce, ForceMode2D.Impulse);
-            }
+
             SoundManager.instance.PlaySound(SoundManager.instance.shootSound);
         }
     }

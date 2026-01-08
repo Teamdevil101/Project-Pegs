@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -118,13 +119,8 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-
         
-        if (GetAllOrangePegsCount() <= 0 && currentGameState != GameState.Final)
-            WinGame();
-
-        
-        if (totalBallCount <= 0 && totalActiveBallCount == 0 && GetAllOrangePegsCount() > 0 && currentGameState != GameState.Final)
+        if (totalBallCount <= 0 && totalActiveBallCount == 0 && GetAllOrangePegsCount() > 0 && (currentGameState != GameState.Win || currentGameState != GameState.Lose))
             LoseGame();
 
         
@@ -218,7 +214,7 @@ public class GameManager : MonoBehaviour
     public int GetAllOrangePegsCount(bool excludeVanished = true)
     {
         if (excludeVanished)
-            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf).Count();
+            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf && !g.IsTriggered()).Count();
         else
             return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory).Count();
     }
@@ -293,7 +289,8 @@ public class GameManager : MonoBehaviour
         Start,
         Aim,
         Shot,
-        Final
+        Win,
+        Lose
     }
 
     [System.Serializable]
@@ -310,8 +307,10 @@ public class GameManager : MonoBehaviour
         if (winUI != null)
             winUI.SetActive(true);
 
-        currentGameState = GameState.Final;
+        currentGameState = GameState.Win;
         Time.timeScale = 0.4f; // Optional slow motion
+
+        StartCoroutine(ReturnToMenu());
     }
 
     public void LoseGame()
@@ -319,13 +318,29 @@ public class GameManager : MonoBehaviour
         if (loseUI != null)
             loseUI.SetActive(true);
 
-        currentGameState = GameState.Final;
+        currentGameState = GameState.Lose;
         Time.timeScale = 0.4f; // Optional slow motion
+
+        StartCoroutine(RestartGame());
     }
 
-    public void RestartGame()
+    public IEnumerator RestartGame()
     {
+        yield return new WaitForSecondsRealtime(3f);
+
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public IEnumerator ReturnToMenu()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+
+        Time.timeScale = 1f;
+        
+        if (isACustomLevel)
+            SceneManager.LoadScene("LevelEditor");
+        else
+            SceneManager.LoadScene(0);
     }
 }

@@ -6,11 +6,10 @@ public class BallDeathZone : MonoBehaviour
     {
         if (other.CompareTag("Ball"))
         {
+            SoundManager.instance.PlaySound(SoundManager.instance.outSound);
+
             if (GameManager.instance != null)
-            {
                 GameManager.instance.AdjustActiveBallToCount(-1);
-                GameManager.instance.AdjustBallCount(-1);
-            }
 
             Destroy(other.gameObject);
         }

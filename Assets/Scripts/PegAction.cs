@@ -40,7 +40,7 @@ public class PegAction : MonoBehaviour
     public void SetPegType(PegType type) => MyPegType = type;
 
     // Shared handler for both trigger and collision events
-    private void HandleHit(GameObject other)
+    public void HandleHit(GameObject other)
     {
         if (triggered) return;
         if (!string.IsNullOrEmpty(ballTag) && !other.CompareTag(ballTag)) return;
@@ -53,13 +53,16 @@ public class PegAction : MonoBehaviour
         if (pegSpriteRenderer != null)
             pegSpriteRenderer.sprite = hitSprite;
 
+        PlayImpactSound();
+
         if (myCollider != null)
             GameManager.instance.StoreForDestruction(gameObject);
 
-        gameObject.SetActive(false);
+        if (GameManager.instance.GetAllOrangePegsCount() <= 0 && (GameManager.instance.GetCurrentState() != GameManager.GameState.Win || GameManager.instance.GetCurrentState() != GameManager.GameState.Lose))
+            GameManager.instance.WinGame();
     }
 
-    void PlayImpactSound(float velocity)
+    void PlayImpactSound()
     {
         AudioClip impactClip = GameManager.instance.pegData[(int)MyPegType].impactSound;
         
@@ -74,6 +77,7 @@ public class PegAction : MonoBehaviour
         HandleHit(collision.gameObject);
     }
 
+    public bool IsTriggered() => triggered;
     public enum PegType
     {
         Regular,
