@@ -8,7 +8,6 @@ public class CannonController : MonoBehaviour
     public float shootForce = 10f;
     public LineRenderer trajectoryLine;
     public int resolution = 40;
-    public Vector2 aimOffset = Vector2.zero;
 
     [Header("Aim Adjustment")]
     public Vector2 aimOffset = Vector2.zero; // Optional offset to fine-tune mouse alignment

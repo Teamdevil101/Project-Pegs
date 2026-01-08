@@ -48,9 +48,7 @@ public class PegAction : MonoBehaviour
 
         if (myCollider != null)
             GameManager.instance.StoreForDestruction(gameObject);
-        if (myCollider != null)
-            GameManager.instance.StoreForDestruction(gameObject);
-    }
+
         gameObject.SetActive(false);
     }
 
