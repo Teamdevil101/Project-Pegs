@@ -29,6 +29,18 @@ public class GameManager : MonoBehaviour
     private List<PegAction> pegsToDisable = new();
     private GameState currentGameState = GameState.Start;
 
+    public bool isACustomLevel = false;
+    public static LevelData customLevelData;
+    public static string customLevelPath;
+
+    [SerializeField] private LevelObjectRegistry registry;
+    [SerializeField] private string levelEditorSceneName = "LevelEditor";
+    [SerializeField] private string[] pegTypeIds = { "peg", "squarepeg" };
+    private HashSet<string> pegTypeIdSet;
+    [SerializeField] private Transform nonPegContainer;
+
+    public int GetTotalHitPegCount => pegsToDisable.Count;
+
     private void Awake()
     {
         if (instance == null)
@@ -38,6 +50,13 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"Multiple GameManagers detected! " +
                 $"You can't have more than one! Deleting the extra manager in {gameObject.name}");
             Destroy(gameObject);
+        }
+
+        pegTypeIdSet = new HashSet<string>(pegTypeIds);
+
+        if (isACustomLevel)
+        {
+            LoadLevel(customLevelData);
         }
     }
 
@@ -59,7 +78,10 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(0);
+            if (isACustomLevel)
+                SceneManager.LoadScene("LevelEditor");
+            else
+                SceneManager.LoadScene(0);
         }
     }
 
@@ -81,6 +103,7 @@ public class GameManager : MonoBehaviour
                 pegTimer += Time.deltaTime;
                 if (pegTimer >= pegDisableDelay)
                 {
+                    SoundManager.instance.PlaySound(pegsToDisable[pegIndex].pegPopSound);
                     pegsToDisable[pegIndex].gameObject.SetActive(false);
                     pegIndex++;
                     pegTimer = 0f;
@@ -101,26 +124,25 @@ public class GameManager : MonoBehaviour
 
     private void SetRandomOrangePegs(int totalCount)
     {
-        if(allPegs.Count < totalCount)
-            totalCount = allPegs.Count;
+        if (allPegs == null || allPegs.Count == 0)
+            return;
 
-        for (int i = 0; i < totalCount; i++)
+        var candidates = new List<PegAction>(allPegs);
+
+        int count = Mathf.Min(totalCount, candidates.Count);
+
+        Shuffle(candidates);
+
+        for (int i = 0; i < count; i++)
         {
-            int rngPegIndex = Random.Range(0, allPegs.Count);
-            
-            while (allPegs[rngPegIndex].MyPegType == PegAction.PegType.Mandatory) // Still a placeholder way to find OrangePegs...
-            {
-                rngPegIndex = (rngPegIndex + 1) % allPegs.Count;
-            }
-
-            allPegs[rngPegIndex].SetPegType(PegAction.PegType.Mandatory);
-            allPegs[rngPegIndex].UpdatePegColor();
+            candidates[i].SetPegType(PegAction.PegType.Mandatory);
+            candidates[i].UpdatePegColor();
         }
     }
 
     private void SetRandomPurplePeg()
     {
-        if (GetAllPegsCount() == 0)
+        if (allPegs == null || allPegs.Count == 0)
             return;
             
         if (currentSpecialPeg != null)
@@ -129,18 +151,30 @@ public class GameManager : MonoBehaviour
             currentSpecialPeg.UpdatePegColor();
         }
 
-        int rngPegIndex = Random.Range(0, allPegs.Count);
+        var candidates = new List<PegAction>();
 
-        while (allPegs[rngPegIndex].MyPegType == PegAction.PegType.Mandatory
-                || allPegs[rngPegIndex].MyPegType == PegAction.PegType.PowerUp
-                || !allPegs[rngPegIndex].gameObject.activeSelf)
+        candidates.AddRange(allPegs.FindAll(p => p.MyPegType == PegAction.PegType.Regular));
+        
+        if (candidates.Count == 0)
         {
-            rngPegIndex = (rngPegIndex + 1) % allPegs.Count;
+            Debug.Log("No valid pegs for purple selection. Skipping.");
+            return;
         }
 
-        currentSpecialPeg = allPegs[rngPegIndex];
+        int index = Random.Range(0, candidates.Count);
+
+        currentSpecialPeg = candidates[index];
         currentSpecialPeg.SetPegType(PegAction.PegType.Special);
         currentSpecialPeg.UpdatePegColor();
+    }
+
+    private static void Shuffle<T>(IList<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
     }
 
     public void ChangeState(GameState newState) => currentGameState = newState;
@@ -197,6 +231,50 @@ public class GameManager : MonoBehaviour
 
         if (totalActiveBallCount < 0)
             totalActiveBallCount = 0;
+    }
+
+    private void LoadLevel(LevelData levelData)
+    {
+        if (levelData == null) return;
+
+        if (registry == null)
+        {
+            Debug.LogError("GameManager: registry is not assigned.");
+            return;
+        }
+
+        if (pegTypeIdSet == null)
+            pegTypeIdSet = new HashSet<string>(pegTypeIds);
+
+        var pegRoot = pegContainer != null ? pegContainer : transform;
+        var otherRoot = nonPegContainer != null ? nonPegContainer : transform;
+
+        foreach (var objData in levelData.objects)
+        {
+            if (objData == null || string.IsNullOrEmpty(objData.objectTypeId))
+                continue;
+
+            var prefabs = registry.GetAllPrefabs(objData.objectTypeId);
+            var prefab = prefabs != null ? prefabs.inGamePrefab : null;
+            if (prefab == null)
+            {
+                Debug.LogWarning($"No inGamePrefab for '{objData.objectTypeId}'.");
+                continue;
+            }
+
+            var parent = pegTypeIdSet.Contains(objData.objectTypeId) ? pegRoot : otherRoot;
+
+            var rot = Quaternion.Euler(0f, 0f, objData.rotationZ);
+            var instance = Instantiate(prefab, objData.position, rot, parent);
+            instance.transform.localScale = objData.scale;
+
+            if (!string.IsNullOrEmpty(objData.physicsMaterialId))
+            {
+                var mat = registry.GetMaterial(objData.physicsMaterialId);
+                if (mat != null && instance.TryGetComponent<Collider2D>(out var col2D))
+                    col2D.sharedMaterial = mat;
+            }
+        }
     }
 
     public enum GameState
