@@ -3,21 +3,27 @@
 public class PegAction : MonoBehaviour
 {
     public string ballTag = "";
+    public AudioClip pegPopSound = null;
 
+    [Space]
     public Sprite baseSprite;
     public Sprite hitSprite;
 
     public SpriteRenderer pegSpriteRenderer;
-    private Collider2D myCollider;
+    public Collider2D myCollider;
 
     public PegType MyPegType { get; private set; }
     private bool triggered = false;
 
     private void Awake()
     {
-        myCollider = GetComponent<Collider2D>();
         if (pegSpriteRenderer != null)
             pegSpriteRenderer.sprite = baseSprite;
+
+        if(myCollider == null)
+            myCollider = GetComponent<Collider2D>();
+        
+        pegSpriteRenderer.sprite = baseSprite;
     }
 
     private void Start()
@@ -33,7 +39,8 @@ public class PegAction : MonoBehaviour
 
     public void SetPegType(PegType type) => MyPegType = type;
 
-    void HandleHit(GameObject other)
+    // Shared handler for both trigger and collision events
+    private void HandleHit(GameObject other)
     {
         if (triggered) return;
         if (!string.IsNullOrEmpty(ballTag) && !other.CompareTag(ballTag)) return;
@@ -58,7 +65,7 @@ public class PegAction : MonoBehaviour
         
         if (impactClip != null)
         {
-            SoundManager.instance.PlayPegImpactSound(impactClip, velocity);
+            SoundManager.instance.PlayPegImpactSound(impactClip, MyPegType);
         }
     }
 
