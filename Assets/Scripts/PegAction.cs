@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PegAction : MonoBehaviour
 {
-    [Tooltip("Only objects with this tag will trigger the peg.")]
     public string ballTag = "";
 
     public Sprite baseSprite;
@@ -17,7 +16,8 @@ public class PegAction : MonoBehaviour
     private void Awake()
     {
         myCollider = GetComponent<Collider2D>();
-        pegSpriteRenderer.sprite = baseSprite;
+        if (pegSpriteRenderer != null)
+            pegSpriteRenderer.sprite = baseSprite;
     }
 
     private void Start()
@@ -27,20 +27,16 @@ public class PegAction : MonoBehaviour
 
     public void UpdatePegColor()
     {
-        pegSpriteRenderer.color = GameManager.instance.pegData[(int)MyPegType].baseColor;
+        if (GameManager.instance != null && pegSpriteRenderer != null)
+            pegSpriteRenderer.color = GameManager.instance.pegData[(int)MyPegType].baseColor;
     }
 
     public void SetPegType(PegType type) => MyPegType = type;
 
-    // Shared handler for both trigger and collision events
     void HandleHit(GameObject other)
     {
         if (triggered) return;
-
-        // Optional tag filter
         if (!string.IsNullOrEmpty(ballTag) && !other.CompareTag(ballTag)) return;
-
-        // Ensure the other object is a physics object (has a Rigidbody2D)
         if (other.GetComponent<Rigidbody2D>() == null) return;
 
         triggered = true;
@@ -48,20 +44,16 @@ public class PegAction : MonoBehaviour
         if (pegSpriteRenderer != null)
             pegSpriteRenderer.sprite = hitSprite;
 
-        if (myCollider != null)
+        if (GameManager.instance != null)
             GameManager.instance.StoreForDestruction(gameObject);
+
+        gameObject.SetActive(false);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         HandleHit(collision.gameObject);
     }
-
-    // Useful for trigger objects
-    /*void OnTriggerEnter2D(Collider2D other)
-    {
-        HandleHit(other.gameObject);
-    }*/
 
     public enum PegType
     {

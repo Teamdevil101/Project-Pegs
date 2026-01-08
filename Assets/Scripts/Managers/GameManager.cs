@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
     private List<PegAction> allPegs = new();
     private List<PegAction> pegsToDisable = new();
     private GameState currentGameState = GameState.Start;
-
+    public GameObject winUI;
+    public GameObject loseUI;
     private void Awake()
     {
         if (instance == null)
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene(0);
         }
@@ -65,48 +66,54 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(currentGameState == GameState.Shot)
+     
+        if (totalActiveBallCount == 0 && pegsToDisable.Count > 0)
         {
-            if(totalActiveBallCount == 0)
+            pegTimer += Time.deltaTime;
+            if (pegTimer >= pegDisableDelay)
             {
-                if (pegsToDisable.Count == 0)
-                {
-                    currentGameState = GameState.Aim;
-                    SetRandomPurplePeg();
-                }
+                pegsToDisable[pegIndex].gameObject.SetActive(false);
+                pegIndex++;
+                pegTimer = 0f;
+            }
 
-                if (pegIndex >= pegsToDisable.Count) return;
-
-                pegTimer += Time.deltaTime;
-                if (pegTimer >= pegDisableDelay)
-                {
-                    pegsToDisable[pegIndex].gameObject.SetActive(false);
-                    pegIndex++;
-                    pegTimer = 0f;
-                }
-
-                if (pegIndex >= pegsToDisable.Count)
-                {
-                    pegIndex = 0;
-                    pegsToDisable.Clear();
-                }
+            if (pegIndex >= pegsToDisable.Count)
+            {
+                pegIndex = 0;
+                pegsToDisable.Clear();
             }
         }
 
+        
+        if (totalActiveBallCount == 0 && currentGameState != GameState.Final)
+        {
+            currentGameState = GameState.Aim;
+            SetRandomPurplePeg();
+        }
+
+        
+        if (GetAllOrangePegsCount() <= 0 && currentGameState != GameState.Final)
+            WinGame();
+
+        
+        if (totalBallCount <= 0 && totalActiveBallCount == 0 && GetAllOrangePegsCount() > 0 && currentGameState != GameState.Final)
+            LoseGame();
+
+        
         pegCounterElement.text = $"Peg Counter:\nTotal: {GetAllPegsCount(false)}\nOrange Total: {GetAllOrangePegsCount(false)}" +
             $"\nTotal Left: {GetAllPegsCount()}\nOrange Left: {GetAllOrangePegsCount()}" +
-            $"\nBall Count: {totalBallCount}";// Should be moved out of here.
+            $"\nBall Count: {totalBallCount}";
     }
 
     private void SetRandomOrangePegs(int totalCount)
     {
-        if(allPegs.Count < totalCount)
+        if (allPegs.Count < totalCount)
             totalCount = allPegs.Count;
 
         for (int i = 0; i < totalCount; i++)
         {
             int rngPegIndex = Random.Range(0, allPegs.Count);
-            
+
             while (allPegs[rngPegIndex].MyPegType == PegAction.PegType.Mandatory) // Still a placeholder way to find OrangePegs...
             {
                 rngPegIndex = (rngPegIndex + 1) % allPegs.Count;
@@ -144,15 +151,15 @@ public class GameManager : MonoBehaviour
 
     public List<PegAction> GetAllOrangePegs(bool excludeVanished = true)
     {
-        if(excludeVanished)
-            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf).ToList(); // Placeholder way to find orange pegs
+        if (excludeVanished)
+            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory && g.gameObject.activeSelf).ToList();
         else
-            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory).ToList(); // Placeholder way to find orange pegs
+            return allPegs.Where(g => g.MyPegType == PegAction.PegType.Mandatory).ToList();
     }
 
     public List<PegAction> GetAllPegs(bool excludeVanished = true)
     {
-        if(excludeVanished)
+        if (excludeVanished)
             return allPegs.Where(g => g.gameObject.activeSelf).ToList();
         else
             return allPegs;
@@ -160,7 +167,7 @@ public class GameManager : MonoBehaviour
 
     public int GetAllPegsCount(bool excludeVanished = true)
     {
-        if(excludeVanished)
+        if (excludeVanished)
             return allPegs.Where(g => g.gameObject.activeSelf).Count();
         else
             return allPegs.Count;
@@ -209,5 +216,29 @@ public class GameManager : MonoBehaviour
         public PegAction.PegType linkedType;
         public long basePoints;
         public Color baseColor = Color.white;
+    }
+
+    public void WinGame()
+    {
+        if (winUI != null)
+            winUI.SetActive(true);
+
+        currentGameState = GameState.Final;
+        Time.timeScale = 0.4f; // Optional slow motion
+    }
+
+    public void LoseGame()
+    {
+        if (loseUI != null)
+            loseUI.SetActive(true);
+
+        currentGameState = GameState.Final;
+        Time.timeScale = 0.4f; // Optional slow motion
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
